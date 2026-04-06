@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-const connection = mysql.createPool({
+const pool = mysql.createPool({
   host: process.env.MYSQLHOST || 'localhost',
   user: process.env.MYSQLUSER || 'root',
   password: process.env.MYSQLPASSWORD || '',
@@ -11,13 +11,18 @@ const connection = mysql.createPool({
   queueLimit: 0
 });
 
-connection.getConnection((err, conn) => {
+pool.getConnection((err, conn) => {
   if (err) {
-    console.error('Error conectando a MySQL:', err.message);
+    console.error('Error conectando a MySQL COMPLETO:', err);
+    console.error('MYSQLHOST:', process.env.MYSQLHOST);
+    console.error('MYSQLUSER:', process.env.MYSQLUSER);
+    console.error('MYSQLDATABASE:', process.env.MYSQLDATABASE);
+    console.error('DB_NAME:', process.env.DB_NAME);
+    console.error('MYSQLPORT:', process.env.MYSQLPORT);
   } else {
     console.log('Conectado a MySQL');
     conn.release();
   }
 });
 
-module.exports = connection;
+module.exports = pool;
